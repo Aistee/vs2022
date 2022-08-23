@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gtfs_db/gtfs_db.dart';
+import 'package:transit/constants.dart';
 import 'package:transit/database/database_service.dart';
 import 'package:transit/models/db.dart';
+import 'package:transit/navigator_routes.dart';
+import 'package:transit/screens/tabs/nearby_stops_tab.dart';
+import 'package:transit/screens/trip/trip_screen.dart';
 import 'package:transit/widgets/app_future_loader.dart';
 
 class StopScreen extends StatelessWidget {
@@ -70,14 +74,30 @@ class TripStopTimeListTile extends StatelessWidget {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(6.0),
-            child: Text(route.route_short_name ?? '',  style: TextStyle(color: route.parsedRouteTextColor, fontSize: 18.0) ),
+            child: Text(
+              route.route_short_name ?? '',
+              style: TextStyle(
+                color: route.parsedRouteTextColor,
+                fontSize: 18.0,
+              ),
+            ),
           ),
         ),
       ),
       title: Text(tripHeadSign),
       trailing: Text(stopTime.departure_time),
       subtitle: Text(route.route_long_name),
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          NavigatorRoutes.routeTrip,
+          arguments: TripScreenArguments(
+            route: route,
+            trip: trip,
+            stop: stop,
+          ),
+        );
+      },
     );
-    return Text('$tripHeadSign: ${stopTime.departure_time}');
   }
 }
